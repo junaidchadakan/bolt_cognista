@@ -1,71 +1,84 @@
 import React from 'react';
-import { Clock, Target, Code, BarChart, Brain, Database } from 'lucide-react';
+import { Clock, Target, Code, BarChart, Brain, Database, ArrowRight } from 'lucide-react';
 
 interface CourseCardsProps {
   onOpenPopup: (popupType: string) => void;
+  onOpenCourseDetail: (courseId: string) => void;
 }
 
-const CourseCards: React.FC<CourseCardsProps> = ({ onOpenPopup }) => {
+const CourseCards: React.FC<CourseCardsProps> = ({ onOpenPopup, onOpenCourseDetail }) => {
   const courses = [
     {
-      id: 'ai',
+      id: 'master-ai',
       title: 'Master in Artificial Intelligence',
       duration: '12 Months',
       icon: Brain,
       tools: ['Python', 'TensorFlow', 'PyTorch', 'OpenCV'],
       outcomes: ['AI Engineer', 'ML Engineer', 'AI Researcher'],
       color: 'from-purple-500 to-pink-500',
-      description: 'Build intelligent systems, neural networks, and machine learning models for real-world applications.'
+      description: 'Build intelligent systems, neural networks, and machine learning models for real-world applications.',
+      price: '₹1,50,000',
+      originalPrice: '₹2,00,000'
     },
     {
-      id: 'datascience',
+      id: 'master-data-science',
       title: 'Master in Data Science',
       duration: '10 Months',
       icon: BarChart,
       tools: ['Python', 'R', 'Pandas', 'Scikit-learn'],
       outcomes: ['Data Scientist', 'ML Engineer', 'Data Analyst'],
       color: 'from-blue-500 to-cyan-500',
-      description: 'Extract insights from complex data and build predictive models to drive business decisions.'
+      description: 'Extract insights from complex data and build predictive models to drive business decisions.',
+      price: '₹1,20,000',
+      originalPrice: '₹1,60,000'
     },
     {
-      id: 'dataanalyst',
-      title: 'Data Analyst',
+      id: 'data-analyst',
+      title: 'Data Analyst Professional',
       duration: '6 Months',
       icon: BarChart,
       tools: ['SQL', 'Excel', 'Python', 'Tableau'],
       outcomes: ['Data Analyst', 'Business Analyst', 'BI Analyst'],
       color: 'from-green-500 to-teal-500',
-      description: 'Analyze business data and create visualizations to support strategic decision-making.'
+      description: 'Analyze business data and create visualizations to support strategic decision-making.',
+      price: '₹80,000',
+      originalPrice: '₹1,20,000'
     },
     {
-      id: 'fullstack',
-      title: 'Full Stack in Python',
+      id: 'full-stack-python',
+      title: 'Full Stack Python Developer',
       duration: '8 Months',
       icon: Code,
       tools: ['Python', 'Django', 'React', 'PostgreSQL'],
       outcomes: ['Full Stack Developer', 'Python Developer', 'Web Developer'],
       color: 'from-orange-500 to-red-500',
-      description: 'Build complete web applications from frontend to backend using modern Python frameworks.'
+      description: 'Build complete web applications from frontend to backend using modern Python frameworks.',
+      price: '₹1,00,000',
+      originalPrice: '₹1,40,000'
     },
     {
-      id: 'powerbi',
-      title: 'Power BI',
+      id: 'power-bi',
+      title: 'Power BI Professional',
       duration: '3 Months',
       icon: BarChart,
       tools: ['Power BI', 'DAX', 'Power Query', 'Excel'],
       outcomes: ['BI Developer', 'Data Analyst', 'BI Consultant'],
       color: 'from-yellow-500 to-orange-500',
-      description: 'Create interactive dashboards and reports with Microsoft Power BI for business intelligence.'
+      description: 'Create interactive dashboards and reports with Microsoft Power BI for business intelligence.',
+      price: '₹40,000',
+      originalPrice: '₹60,000'
     },
     {
       id: 'tableau',
-      title: 'Tableau',
+      title: 'Tableau Expert Certification',
       duration: '3 Months',
       icon: Database,
       tools: ['Tableau', 'SQL', 'Statistics', 'Analytics'],
       outcomes: ['Tableau Developer', 'Data Visualization Specialist', 'BI Analyst'],
       color: 'from-indigo-500 to-purple-500',
-      description: 'Master data visualization and create stunning interactive dashboards with Tableau.'
+      description: 'Master data visualization and create stunning interactive dashboards with Tableau.',
+      price: '₹45,000',
+      originalPrice: '₹65,000'
     }
   ];
 
@@ -102,6 +115,12 @@ const CourseCards: React.FC<CourseCardsProps> = ({ onOpenPopup }) => {
 
               {/* Card Body */}
               <div className="p-6">
+                {/* Pricing */}
+                <div className="mb-4 text-center">
+                  <div className="text-2xl font-bold text-green-600">{course.price}</div>
+                  <div className="text-sm text-gray-500 line-through">{course.originalPrice}</div>
+                </div>
+
                 {/* Tools */}
                 <div className="mb-6">
                   <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
@@ -136,13 +155,22 @@ const CourseCards: React.FC<CourseCardsProps> = ({ onOpenPopup }) => {
                   </div>
                 </div>
 
-                {/* CTA Button */}
-                <button 
-                  onClick={() => onOpenPopup('bookCall')}
-                  className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105`}
-                >
-                  Learn More
-                </button>
+                {/* CTA Buttons */}
+                <div className="space-y-3">
+                  <button 
+                    onClick={() => onOpenCourseDetail(course.id)}
+                    className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105 flex items-center justify-center space-x-2`}
+                  >
+                    <span>Learn More</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <button 
+                    onClick={() => onOpenPopup('bookCall')}
+                    className="w-full border border-purple-600 text-purple-600 py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+                  >
+                    Book Free Call
+                  </button>
+                </div>
               </div>
             </div>
           ))}

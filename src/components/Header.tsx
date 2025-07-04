@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Menu, X, Brain, Phone, User, ChevronDown, Download, Calendar, MessageCircle } from 'lucide-react';
 import WhatsAppButton from './WhatsAppButton';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenCourseDetail?: (courseId: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenCourseDetail }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
@@ -10,25 +14,25 @@ const Header: React.FC = () => {
     {
       category: 'AI & Machine Learning',
       courses: [
-        { name: 'Master in Artificial Intelligence', duration: '12 Months', href: '#ai' },
-        { name: 'Machine Learning Specialist', duration: '8 Months', href: '#ml' },
-        { name: 'Deep Learning Expert', duration: '6 Months', href: '#dl' }
+        { name: 'Master in Artificial Intelligence', duration: '12 Months', id: 'master-ai' },
+        { name: 'Machine Learning Specialist', duration: '8 Months', id: 'master-ai' },
+        { name: 'Deep Learning Expert', duration: '6 Months', id: 'master-ai' }
       ]
     },
     {
       category: 'Data Science & Analytics',
       courses: [
-        { name: 'Master in Data Science', duration: '10 Months', href: '#datascience' },
-        { name: 'Data Analyst Professional', duration: '6 Months', href: '#dataanalyst' },
-        { name: 'Business Intelligence', duration: '4 Months', href: '#bi' }
+        { name: 'Master in Data Science', duration: '10 Months', id: 'master-data-science' },
+        { name: 'Data Analyst Professional', duration: '6 Months', id: 'data-analyst' },
+        { name: 'Business Intelligence', duration: '4 Months', id: 'data-analyst' }
       ]
     },
     {
       category: 'Development & Tools',
       courses: [
-        { name: 'Full Stack Python', duration: '8 Months', href: '#fullstack' },
-        { name: 'Power BI Mastery', duration: '3 Months', href: '#powerbi' },
-        { name: 'Tableau Expert', duration: '3 Months', href: '#tableau' }
+        { name: 'Full Stack Python', duration: '8 Months', id: 'full-stack-python' },
+        { name: 'Power BI Mastery', duration: '3 Months', id: 'power-bi' },
+        { name: 'Tableau Expert', duration: '3 Months', id: 'tableau' }
       ]
     }
   ];
@@ -44,12 +48,26 @@ const Header: React.FC = () => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 
+  const handleCourseClick = (courseId: string) => {
+    if (onOpenCourseDetail) {
+      onOpenCourseDetail(courseId);
+    } else {
+      // Scroll to courses section if on home page
+      const coursesSection = document.getElementById('courses');
+      if (coursesSection) {
+        coursesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setActiveDropdown(null);
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => window.location.reload()}>
             <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
               <Brain className="h-8 w-8 text-white" />
             </div>
@@ -82,10 +100,10 @@ const Header: React.FC = () => {
                       </h3>
                       <div className="space-y-2">
                         {category.courses.map((course, courseIndex) => (
-                          <a
+                          <button
                             key={courseIndex}
-                            href={course.href}
-                            className="flex justify-between items-center p-2 rounded-lg hover:bg-purple-50 transition-colors group"
+                            onClick={() => handleCourseClick(course.id)}
+                            className="flex justify-between items-center p-2 rounded-lg hover:bg-purple-50 transition-colors group w-full text-left"
                           >
                             <div>
                               <div className="font-medium text-gray-900 group-hover:text-purple-600">
@@ -93,7 +111,7 @@ const Header: React.FC = () => {
                               </div>
                               <div className="text-sm text-gray-500">{course.duration}</div>
                             </div>
-                          </a>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -199,13 +217,13 @@ const Header: React.FC = () => {
                           {category.category}
                         </div>
                         {category.courses.map((course, courseIndex) => (
-                          <a
+                          <button
                             key={courseIndex}
-                            href={course.href}
-                            className="block text-sm text-gray-600 hover:text-purple-600 ml-2"
+                            onClick={() => handleCourseClick(course.id)}
+                            className="block text-sm text-gray-600 hover:text-purple-600 ml-2 w-full text-left"
                           >
                             {course.name}
-                          </a>
+                          </button>
                         ))}
                       </div>
                     ))}
