@@ -1,8 +1,47 @@
 import React, { useState } from 'react';
-import { Menu, X, Brain, Phone, User } from 'lucide-react';
+import { Menu, X, Brain, Phone, User, ChevronDown, Download, Calendar, MessageCircle } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const coursesMenu = [
+    {
+      category: 'AI & Machine Learning',
+      courses: [
+        { name: 'Master in Artificial Intelligence', duration: '12 Months', href: '#ai' },
+        { name: 'Machine Learning Specialist', duration: '8 Months', href: '#ml' },
+        { name: 'Deep Learning Expert', duration: '6 Months', href: '#dl' }
+      ]
+    },
+    {
+      category: 'Data Science & Analytics',
+      courses: [
+        { name: 'Master in Data Science', duration: '10 Months', href: '#datascience' },
+        { name: 'Data Analyst Professional', duration: '6 Months', href: '#dataanalyst' },
+        { name: 'Business Intelligence', duration: '4 Months', href: '#bi' }
+      ]
+    },
+    {
+      category: 'Development & Tools',
+      courses: [
+        { name: 'Full Stack Python', duration: '8 Months', href: '#fullstack' },
+        { name: 'Power BI Mastery', duration: '3 Months', href: '#powerbi' },
+        { name: 'Tableau Expert', duration: '3 Months', href: '#tableau' }
+      ]
+    }
+  ];
+
+  const servicesMenu = [
+    { name: 'Career Counseling', icon: MessageCircle, href: '#counseling' },
+    { name: 'Resume Building', icon: User, href: '#resume' },
+    { name: 'Interview Preparation', icon: Calendar, href: '#interview' },
+    { name: 'Job Placement', icon: Phone, href: '#placement' }
+  ];
+
+  const handleDropdownToggle = (dropdown: string) => {
+    setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
+  };
 
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
@@ -19,15 +58,90 @@ const Header: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#courses" className="text-gray-700 hover:text-purple-600 font-medium transition-colors">
-              Courses
-            </a>
+          <nav className="hidden lg:flex items-center space-x-8">
+            {/* Courses Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 font-medium transition-colors"
+                onMouseEnter={() => setActiveDropdown('courses')}
+              >
+                <span>Courses</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+              
+              {activeDropdown === 'courses' && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-96 bg-white rounded-xl shadow-2xl border border-gray-100 p-6 z-50"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  {coursesMenu.map((category, index) => (
+                    <div key={index} className="mb-6 last:mb-0">
+                      <h3 className="text-sm font-bold text-purple-600 mb-3 uppercase tracking-wide">
+                        {category.category}
+                      </h3>
+                      <div className="space-y-2">
+                        {category.courses.map((course, courseIndex) => (
+                          <a
+                            key={courseIndex}
+                            href={course.href}
+                            className="flex justify-between items-center p-2 rounded-lg hover:bg-purple-50 transition-colors group"
+                          >
+                            <div>
+                              <div className="font-medium text-gray-900 group-hover:text-purple-600">
+                                {course.name}
+                              </div>
+                              <div className="text-sm text-gray-500">{course.duration}</div>
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="border-t pt-4 mt-4">
+                    <a
+                      href="#courses"
+                      className="text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+                    >
+                      View All Courses →
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Services Dropdown */}
+            <div className="relative group">
+              <button
+                className="flex items-center space-x-1 text-gray-700 hover:text-purple-600 font-medium transition-colors"
+                onMouseEnter={() => setActiveDropdown('services')}
+              >
+                <span>Services</span>
+                <ChevronDown className="h-4 w-4" />
+              </button>
+              
+              {activeDropdown === 'services' && (
+                <div
+                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 p-4 z-50"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  {servicesMenu.map((service, index) => (
+                    <a
+                      key={index}
+                      href={service.href}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-purple-50 transition-colors group"
+                    >
+                      <service.icon className="h-5 w-5 text-purple-600" />
+                      <span className="font-medium text-gray-900 group-hover:text-purple-600">
+                        {service.name}
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <a href="#mentors" className="text-gray-700 hover:text-purple-600 font-medium transition-colors">
               Mentors
-            </a>
-            <a href="#career" className="text-gray-700 hover:text-purple-600 font-medium transition-colors">
-              Career Services
             </a>
             <a href="#success" className="text-gray-700 hover:text-purple-600 font-medium transition-colors">
               Success Stories
@@ -38,7 +152,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             <button className="flex items-center space-x-2 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
               <Phone className="h-4 w-4" />
               <span>Book Free Call</span>
@@ -51,7 +165,7 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -60,16 +174,64 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="lg:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
-              <a href="#courses" className="text-gray-700 hover:text-purple-600 font-medium">
-                Courses
-              </a>
+              <div>
+                <button
+                  onClick={() => handleDropdownToggle('mobile-courses')}
+                  className="flex items-center justify-between w-full text-gray-700 hover:text-purple-600 font-medium"
+                >
+                  <span>Courses</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${activeDropdown === 'mobile-courses' ? 'rotate-180' : ''}`} />
+                </button>
+                {activeDropdown === 'mobile-courses' && (
+                  <div className="mt-2 ml-4 space-y-2">
+                    {coursesMenu.map((category, index) => (
+                      <div key={index}>
+                        <div className="text-sm font-semibold text-purple-600 mb-1">
+                          {category.category}
+                        </div>
+                        {category.courses.map((course, courseIndex) => (
+                          <a
+                            key={courseIndex}
+                            href={course.href}
+                            className="block text-sm text-gray-600 hover:text-purple-600 ml-2"
+                          >
+                            {course.name}
+                          </a>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              
+              <div>
+                <button
+                  onClick={() => handleDropdownToggle('mobile-services')}
+                  className="flex items-center justify-between w-full text-gray-700 hover:text-purple-600 font-medium"
+                >
+                  <span>Services</span>
+                  <ChevronDown className={`h-4 w-4 transition-transform ${activeDropdown === 'mobile-services' ? 'rotate-180' : ''}`} />
+                </button>
+                {activeDropdown === 'mobile-services' && (
+                  <div className="mt-2 ml-4 space-y-2">
+                    {servicesMenu.map((service, index) => (
+                      <a
+                        key={index}
+                        href={service.href}
+                        className="flex items-center space-x-2 text-sm text-gray-600 hover:text-purple-600"
+                      >
+                        <service.icon className="h-4 w-4" />
+                        <span>{service.name}</span>
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               <a href="#mentors" className="text-gray-700 hover:text-purple-600 font-medium">
                 Mentors
-              </a>
-              <a href="#career" className="text-gray-700 hover:text-purple-600 font-medium">
-                Career Services
               </a>
               <a href="#success" className="text-gray-700 hover:text-purple-600 font-medium">
                 Success Stories
@@ -77,6 +239,7 @@ const Header: React.FC = () => {
               <a href="#faq" className="text-gray-700 hover:text-purple-600 font-medium">
                 FAQ
               </a>
+              
               <div className="flex flex-col space-y-2 pt-4">
                 <button className="flex items-center justify-center space-x-2 bg-orange-500 text-white px-6 py-2 rounded-lg">
                   <Phone className="h-4 w-4" />

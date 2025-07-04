@@ -1,7 +1,11 @@
 import React from 'react';
 import { Clock, Target, Code, BarChart, Brain, Database } from 'lucide-react';
 
-const CourseCards: React.FC = () => {
+interface CourseCardsProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const CourseCards: React.FC<CourseCardsProps> = ({ onOpenPopup }) => {
   const courses = [
     {
       id: 'ai',
@@ -133,7 +137,10 @@ const CourseCards: React.FC = () => {
                 </div>
 
                 {/* CTA Button */}
-                <button className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105`}>
+                <button 
+                  onClick={() => onOpenPopup('bookCall')}
+                  className={`w-full bg-gradient-to-r ${course.color} text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105`}
+                >
                   Learn More
                 </button>
               </div>
@@ -144,7 +151,10 @@ const CourseCards: React.FC = () => {
         {/* Bottom CTA */}
         <div className="text-center mt-16">
           <p className="text-gray-600 mb-6">Can't decide? Get personalized course recommendations</p>
-          <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+          <button 
+            onClick={() => onOpenPopup('careerGuidance')}
+            className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+          >
             Get Free Career Guidance
           </button>
         </div>

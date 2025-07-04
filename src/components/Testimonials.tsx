@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star, Quote } from 'lucide-react';
 
-const Testimonials: React.FC = () => {
+interface TestimonialsProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const Testimonials: React.FC<TestimonialsProps> = ({ onOpenPopup }) => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const testimonials = [
@@ -216,7 +220,10 @@ const Testimonials: React.FC = () => {
         <div className="text-center mt-16">
           <h3 className="text-2xl font-bold mb-4">Ready to Write Your Success Story?</h3>
           <p className="text-gray-300 mb-6">Join thousands of successful career changers</p>
-          <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+          <button 
+            onClick={() => onOpenPopup('bookCall')}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+          >
             Start Your Journey Today
           </button>
         </div>

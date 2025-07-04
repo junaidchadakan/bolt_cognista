@@ -1,7 +1,11 @@
 import React from 'react';
 import { FileText, MessageSquare, Briefcase, Building2, CheckCircle, Users } from 'lucide-react';
 
-const CareerServices: React.FC = () => {
+interface CareerServicesProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const CareerServices: React.FC<CareerServicesProps> = ({ onOpenPopup }) => {
   const services = [
     {
       icon: FileText,
@@ -149,7 +153,10 @@ const CareerServices: React.FC = () => {
           </div>
 
           <div className="text-center mt-8">
-            <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2">
+            <button 
+              onClick={() => onOpenPopup('bookCall')}
+              className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+            >
               <Users className="h-5 w-5" />
               <span>Start Your Journey</span>
             </button>

@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Download, BookOpen, Code, Award } from 'lucide-react';
 
-const CurriculumTabs: React.FC = () => {
+interface CurriculumTabsProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const CurriculumTabs: React.FC<CurriculumTabsProps> = ({ onOpenPopup }) => {
   const [activeTab, setActiveTab] = useState('beginner');
 
   const curriculumData = {
@@ -118,7 +122,10 @@ const CurriculumTabs: React.FC = () => {
               <p className="text-lg mb-6 opacity-90">
                 Download the full curriculum PDF with detailed syllabus, project descriptions, and learning outcomes
               </p>
-              <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2">
+              <button 
+                onClick={() => onOpenPopup('downloadCurriculum')}
+                className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center space-x-2"
+              >
                 <Download className="h-5 w-5" />
                 <span>Download Full Curriculum</span>
               </button>

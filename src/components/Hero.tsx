@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Phone } from 'lucide-react';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onOpenPopup }) => {
   const [currentBanner, setCurrentBanner] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -45,6 +49,7 @@ const Hero: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
+    onOpenPopup('careerGuidance');
   };
 
   return (
@@ -67,11 +72,17 @@ const Hero: React.FC = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="flex items-center justify-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold transition-all transform hover:scale-105">
+              <button 
+                onClick={() => onOpenPopup('bookCall')}
+                className="flex items-center justify-center space-x-2 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold transition-all transform hover:scale-105"
+              >
                 <Phone className="h-5 w-5" />
                 <span>Book Free Career Call</span>
               </button>
-              <button className="flex items-center justify-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-all">
+              <button 
+                onClick={() => onOpenPopup('downloadCurriculum')}
+                className="flex items-center justify-center space-x-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-all"
+              >
                 <Download className="h-5 w-5" />
                 <span>Download Curriculum</span>
               </button>

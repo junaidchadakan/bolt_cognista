@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 
-const FAQ: React.FC = () => {
+interface FAQProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const FAQ: React.FC<FAQProps> = ({ onOpenPopup }) => {
   const [openFAQ, setOpenFAQ] = useState<number | null>(0);
 
   const faqs = [
@@ -109,7 +113,10 @@ const FAQ: React.FC = () => {
               Our career counselors are here to help you make the right decision
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+              <button 
+                onClick={() => onOpenPopup('bookCall')}
+                className="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+              >
                 Book Free Consultation
               </button>
               <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors">

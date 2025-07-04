@@ -1,7 +1,11 @@
 import React from 'react';
 import { MapPin, Award, Users } from 'lucide-react';
 
-const Mentors: React.FC = () => {
+interface MentorsProps {
+  onOpenPopup: (popupType: string) => void;
+}
+
+const Mentors: React.FC<MentorsProps> = ({ onOpenPopup }) => {
   const mentors = [
     {
       name: 'Dr. Sarah Chen',
@@ -156,7 +160,10 @@ const Mentors: React.FC = () => {
                 </div>
 
                 {/* CTA */}
-                <button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105">
+                <button 
+                  onClick={() => onOpenPopup('bookCall')}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all transform group-hover:scale-105"
+                >
                   Book 1:1 Session
                 </button>
               </div>
@@ -174,7 +181,10 @@ const Mentors: React.FC = () => {
               Get matched with the perfect mentor based on your career goals and learning preferences. 
               Start your personalized learning journey today.
             </p>
-            <button className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+            <button 
+              onClick={() => onOpenPopup('careerGuidance')}
+              className="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
+            >
               Find Your Mentor
             </button>
           </div>
