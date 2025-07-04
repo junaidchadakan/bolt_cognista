@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
+import WhatsAppButton from './WhatsAppButton';
 
 interface FAQProps {
   onOpenPopup: (popupType: string) => void;
@@ -119,6 +120,12 @@ const FAQ: React.FC<FAQProps> = ({ onOpenPopup }) => {
               >
                 Book Free Consultation
               </button>
+              <WhatsAppButton 
+                message="Hi! I have some questions about TechAcademy courses and need guidance."
+                className="bg-green-500 hover:bg-green-600 px-8 py-3 rounded-lg"
+              >
+                <span>Ask on WhatsApp</span>
+              </WhatsAppButton>
               <button className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors">
                 Call Now: +91-9876543210
               </button>

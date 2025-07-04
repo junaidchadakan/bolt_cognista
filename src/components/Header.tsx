@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, Brain, Phone, User, ChevronDown, Download, Calendar, MessageCircle } from 'lucide-react';
+import WhatsAppButton from './WhatsAppButton';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -153,6 +154,12 @@ const Header: React.FC = () => {
 
           {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center space-x-4">
+            <WhatsAppButton 
+              message="Hi! I want to book a free career consultation call with TechAcademy."
+              className="px-4 py-2 rounded-lg"
+            >
+              <span>WhatsApp</span>
+            </WhatsAppButton>
             <button className="flex items-center space-x-2 bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors">
               <Phone className="h-4 w-4" />
               <span>Book Free Call</span>
@@ -241,6 +248,10 @@ const Header: React.FC = () => {
               </a>
               
               <div className="flex flex-col space-y-2 pt-4">
+                <WhatsAppButton 
+                  message="Hi! I want to book a free career consultation call with TechAcademy."
+                  className="px-6 py-2 rounded-lg justify-center"
+                />
                 <button className="flex items-center justify-center space-x-2 bg-orange-500 text-white px-6 py-2 rounded-lg">
                   <Phone className="h-4 w-4" />
                   <span>Book Free Call</span>

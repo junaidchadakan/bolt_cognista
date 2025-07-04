@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import BookCallPopup from './components/BookCallPopup';
 import CurriculumDownloadPopup from './components/CurriculumDownloadPopup';
 import CareerGuidancePopup from './components/CareerGuidancePopup';
+import WhatsAppChat from './components/WhatsAppChat';
 
 function App() {
   const [activePopup, setActivePopup] = useState<string | null>(null);
@@ -52,6 +53,9 @@ function App() {
         isOpen={activePopup === 'careerGuidance'} 
         onClose={closePopup} 
       />
+
+      {/* WhatsApp Chat Integration */}
+      <WhatsAppChat />
     </div>
   );
 }

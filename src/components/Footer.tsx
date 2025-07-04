@@ -1,5 +1,6 @@
 import React from 'react';
-import { Brain, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Youtube } from 'lucide-react';
+import { Brain, Mail, Phone, MapPin, Facebook, Twitter, Linkedin, Instagram, Youtube, MessageCircle } from 'lucide-react';
+import WhatsAppButton from './WhatsAppButton';
 
 const Footer: React.FC = () => {
   const courseCategories = [
@@ -64,7 +65,7 @@ const Footer: React.FC = () => {
             </p>
             
             {/* Social Links */}
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mb-6">
               {socialLinks.map((social, index) => (
                 <a
                   key={index}
@@ -76,6 +77,14 @@ const Footer: React.FC = () => {
                 </a>
               ))}
             </div>
+
+            {/* WhatsApp Contact */}
+            <WhatsAppButton 
+              message="Hi! I want to know more about TechAcademy courses and career opportunities."
+              className="px-4 py-2 rounded-lg w-full justify-center"
+            >
+              <span>Connect on WhatsApp</span>
+            </WhatsAppButton>
           </div>
 
           {/* Course Categories */}
