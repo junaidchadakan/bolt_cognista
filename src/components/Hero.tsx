@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Phone } from 'lucide-react';
+import { Download, Phone, CheckCircle } from 'lucide-react';
 
 interface HeroProps {
   onOpenPopup: (popupType: string) => void;
@@ -13,6 +13,8 @@ const Hero: React.FC<HeroProps> = ({ onOpenPopup }) => {
     mobile: '',
     course: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const banners = [
     {
@@ -46,10 +48,57 @@ const Hero: React.FC<HeroProps> = ({ onOpenPopup }) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    onOpenPopup('careerGuidance');
+    setIsSubmitting(true);
+
+    try {
+      // Google Apps Script Web App URL - Replace with your actual deployed web app URL
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+      
+      const submitData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.mobile,
+        course: formData.course,
+        timeSlot: 'To be scheduled', // Default value for hero form
+        message: 'Submitted from hero section - interested in career consultation',
+        timestamp: new Date().toISOString(),
+        source: 'Hero Section Form'
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData)
+      });
+
+      // Since we're using no-cors mode, we can't read the response
+      // We'll assume success if no error is thrown
+      setIsSuccess(true);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        mobile: '',
+        course: ''
+      });
+
+      // Reset success state after 3 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 3000);
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('There was an error submitting your request. Please try again or call us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -101,65 +150,97 @@ const Hero: React.FC<HeroProps> = ({ onOpenPopup }) => {
 
           {/* Right Content - Form */}
           <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20">
-            <h3 className="text-2xl font-bold mb-6 text-center">Get Started Today</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Full Name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  required
-                />
+            {isSuccess ? (
+              <div className="text-center space-y-6">
+                <div className="bg-green-100 p-4 rounded-full w-20 h-20 mx-auto flex items-center justify-center">
+                  <CheckCircle className="h-12 w-12 text-green-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-green-400 mb-2">Thank You!</h3>
+                  <p className="text-gray-200">
+                    Your request has been submitted successfully. Our career counselor will contact you within 24 hours.
+                  </p>
+                </div>
+                <div className="bg-green-500/20 border border-green-400/30 rounded-lg p-4">
+                  <p className="text-sm text-green-200">
+                    <strong>What's next?</strong><br />
+                    • You'll receive a confirmation email shortly<br />
+                    • Our counselor will call you to discuss your goals<br />
+                    • Get personalized course recommendations
+                  </p>
+                </div>
               </div>
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  type="tel"
-                  name="mobile"
-                  placeholder="Mobile Number"
-                  value={formData.mobile}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  required
-                />
-              </div>
-              <div>
-                <select
-                  name="course"
-                  value={formData.course}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
-                  required
-                >
-                  <option value="" className="text-gray-900">Select Preferred Course</option>
-                  <option value="ai" className="text-gray-900">Master in AI</option>
-                  <option value="datascience" className="text-gray-900">Master in Data Science</option>
-                  <option value="dataanalyst" className="text-gray-900">Data Analyst</option>
-                  <option value="fullstack" className="text-gray-900">Full Stack Python</option>
-                  <option value="powerbi" className="text-gray-900">Power BI</option>
-                  <option value="tableau" className="text-gray-900">Tableau</option>
-                </select>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition-all transform hover:scale-105"
-              >
-                Get Free Career Consultation
-              </button>
-            </form>
+            ) : (
+              <>
+                <h3 className="text-2xl font-bold mb-6 text-center">Get Started Today</h3>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Full Name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="Email Address"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      name="mobile"
+                      placeholder="Mobile Number"
+                      value={formData.mobile}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <select
+                      name="course"
+                      value={formData.course}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:ring-2 focus:ring-orange-400"
+                      required
+                    >
+                      <option value="" className="text-gray-900">Select Preferred Course</option>
+                      <option value="ai" className="text-gray-900">Master in AI</option>
+                      <option value="datascience" className="text-gray-900">Master in Data Science</option>
+                      <option value="dataanalyst" className="text-gray-900">Data Analyst</option>
+                      <option value="fullstack" className="text-gray-900">Full Stack Python</option>
+                      <option value="powerbi" className="text-gray-900">Power BI</option>
+                      <option value="tableau" className="text-gray-900">Tableau</option>
+                    </select>
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-pink-600 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                        Submitting...
+                      </div>
+                    ) : (
+                      'Get Free Career Consultation'
+                    )}
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
 
