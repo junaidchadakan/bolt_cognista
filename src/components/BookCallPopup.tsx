@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Phone, Calendar, Clock, User, Mail, MessageSquare } from 'lucide-react';
+import { Phone, Calendar, Clock, User, Mail, MessageSquare, CheckCircle } from 'lucide-react';
 import PopupModal from './PopupModal';
 
 interface BookCallPopupProps {
@@ -16,6 +16,8 @@ const BookCallPopup: React.FC<BookCallPopupProps> = ({ isOpen, onClose }) => {
     timeSlot: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const timeSlots = [
     '10:00 AM - 11:00 AM',
@@ -42,13 +44,82 @@ const BookCallPopup: React.FC<BookCallPopupProps> = ({ isOpen, onClose }) => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Call booking submitted:', formData);
-    // Here you would typically send the data to your backend
-    alert('Your call has been scheduled! We will contact you shortly.');
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      // Google Apps Script Web App URL - Replace with your actual deployed web app URL
+      const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+      
+      const submitData = {
+        ...formData,
+        timestamp: new Date().toISOString(),
+        source: 'Book Free Call Popup'
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Required for Google Apps Script
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData)
+      });
+
+      // Since we're using no-cors mode, we can't read the response
+      // We'll assume success if no error is thrown
+      setIsSuccess(true);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        course: '',
+        timeSlot: '',
+        message: ''
+      });
+
+      // Close popup after 2 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+        onClose();
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('There was an error submitting your request. Please try again or call us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (isSuccess) {
+    return (
+      <PopupModal isOpen={isOpen} onClose={onClose} title="Call Scheduled Successfully!">
+        <div className="text-center space-y-6">
+          <div className="bg-green-100 p-4 rounded-full w-20 h-20 mx-auto flex items-center justify-center">
+            <CheckCircle className="h-12 w-12 text-green-600" />
+          </div>
+          <div>
+            <h3 className="text-2xl font-bold text-green-600 mb-2">Success!</h3>
+            <p className="text-gray-600">
+              Your call has been scheduled successfully. Our career counselor will contact you within 24 hours.
+            </p>
+          </div>
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="text-sm text-green-700">
+              <strong>What's next?</strong><br />
+              • You'll receive a confirmation email shortly<br />
+              • Our counselor will call you at your preferred time<br />
+              • Prepare any questions about your career goals
+            </p>
+          </div>
+        </div>
+      </PopupModal>
+    );
+  }
 
   return (
     <PopupModal isOpen={isOpen} onClose={onClose} title="Book Your Free Career Call">
@@ -162,10 +233,20 @@ const BookCallPopup: React.FC<BookCallPopupProps> = ({ isOpen, onClose }) => {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105"
+            disabled={isSubmitting}
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Calendar className="h-5 w-5 inline mr-2" />
-            Schedule My Free Call
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Scheduling Your Call...
+              </div>
+            ) : (
+              <>
+                <Calendar className="h-5 w-5 inline mr-2" />
+                Schedule My Free Call
+              </>
+            )}
           </button>
         </form>
 
