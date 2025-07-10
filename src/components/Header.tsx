@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenCourseDetail }) => {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => window.location.reload()}>
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
+            <div className="bg-gradiet-to-r from-purple-600 to-blue-600 p-2 rounded-lg">
               <Brain className="h-8 w-8 text-white" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
