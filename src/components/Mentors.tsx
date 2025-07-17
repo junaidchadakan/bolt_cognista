@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin, Award, Users } from 'lucide-react';
 
 interface MentorsProps {
-  onOpenPopup (popupType: string) => void;
+  onOpenPopup: (popupType: string) => void;
 }
 
 const Mentors: React.FC<MentorsProps> = ({ onOpenPopup }) => {
